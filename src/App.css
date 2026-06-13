@@ -117,7 +117,7 @@ body {
 .card-back {
   background-size: 7.5rem 12rem;
   border-radius: 1rem;
-  background-image: url("src/assets/back1.png");
+  background-image: url("/assets/back1.png");
   display: flex;
   align-items: center;
   justify-content: center;
