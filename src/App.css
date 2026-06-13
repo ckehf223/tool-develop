@@ -1,184 +1,166 @@
-.counter {
-  font-size: 16px;
-  padding: 5px 10px;
-  border-radius: 5px;
-  color: var(--accent);
-  background: var(--accent-bg);
-  border: 2px solid transparent;
-  transition: border-color 0.3s;
-  margin-bottom: 24px;
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background: #14001f;
+}
 
-  &:hover {
-    border-color: var(--accent-border);
-  }
-  &:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
+* {
+  box-sizing: border-box;
+}
+
+.app {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #12001f, #4b0082);
+  color: white;
+}
+
+.overlay {
+  padding: 20px;
 }
 
 .hero {
-  position: relative;
-
-  .base,
-  .framework,
-  .vite {
-    inset-inline: 0;
-    margin: 0 auto;
-  }
-
-  .base {
-    width: 170px;
-    position: relative;
-    z-index: 0;
-  }
-
-  .framework,
-  .vite {
-    position: absolute;
-  }
-
-  .framework {
-    z-index: 1;
-    top: 34px;
-    height: 28px;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg)
-      scale(1.4);
-  }
-
-  .vite {
-    z-index: 0;
-    top: 107px;
-    height: 26px;
-    width: auto;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg)
-      scale(0.8);
-  }
+  text-align: center;
+  margin-bottom: 30px;
 }
 
-#center {
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+}
+
+.hero h2 {
+  font-size: clamp(1.1rem, 3vw, 1.6rem);
+}
+
+.hero p {
+  opacity: 0.8;
+}
+
+.intro-box {
+  max-width: 800px;
+  margin: 0 auto 40px;
+
+  padding: 20px;
+
+  border-radius: 18px;
+
+  background: rgba(255, 255, 255, 0.08);
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* 중앙 정렬 */
+.card-container {
   display: flex;
-  flex-direction: column;
-  gap: 25px;
-  place-content: center;
-  place-items: center;
-  flex-grow: 1;
-
-  @media (max-width: 1024px) {
-    padding: 32px 20px 24px;
-    gap: 18px;
-  }
+  justify-content: center;
 }
 
-#next-steps {
+/* 가로 스크롤 */
+.card-list {
   display: flex;
-  border-top: 1px solid var(--border);
-  text-align: left;
+  gap: 16px;
 
-  & > div {
-    flex: 1 1 0;
-    padding: 32px;
-    @media (max-width: 1024px) {
-      padding: 24px 20px;
-    }
-  }
+  overflow-x: auto;
 
-  .icon {
-    margin-bottom: 16px;
-    width: 22px;
-    height: 22px;
-  }
+  padding: 20px;
 
-  @media (max-width: 1024px) {
-    flex-direction: column;
-    text-align: center;
-  }
+  max-width: 100%;
+
+  scrollbar-width: thin;
 }
 
-#docs {
-  border-right: 1px solid var(--border);
-
-  @media (max-width: 1024px) {
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-  }
+.card-list::-webkit-scrollbar {
+  height: 8px;
 }
 
-#next-steps ul {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  gap: 8px;
-  margin: 32px 0 0;
+.tarot-card {
+  flex-shrink: 0;
 
-  .logo {
-    height: 18px;
-  }
+  width: 140px;
+  height: 220px;
 
-  a {
-    color: var(--text-h);
-    font-size: 16px;
-    border-radius: 6px;
-    background: var(--social-bg);
-    display: flex;
-    padding: 6px 12px;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    transition: box-shadow 0.3s;
+  cursor: pointer;
 
-    &:hover {
-      box-shadow: var(--shadow);
-    }
-    .button-icon {
-      height: 18px;
-      width: 18px;
-    }
-  }
-
-  @media (max-width: 1024px) {
-    margin-top: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
-
-    li {
-      flex: 1 1 calc(50% - 8px);
-    }
-
-    a {
-      width: 100%;
-      justify-content: center;
-      box-sizing: border-box;
-    }
-  }
+  transition: all 0.3s ease;
 }
 
-#spacer {
-  height: 88px;
-  border-top: 1px solid var(--border);
-  @media (max-width: 1024px) {
-    height: 48px;
-  }
+.tarot-card.selected {
+  transform: translateY(-20px);
 }
 
-.ticks {
-  position: relative;
+.card-inner {
   width: 100%;
+  height: 100%;
 
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    top: -4.5px;
-    border: 5px solid transparent;
+  position: relative;
+
+  transform-style: preserve-3d;
+
+  transition: transform 0.8s;
+}
+
+.tarot-card.opened .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card-back,
+.card-front {
+  position: absolute;
+
+  width: 100%;
+  height: 100%;
+
+  border-radius: 18px;
+
+  backface-visibility: hidden;
+}
+
+.card-back {
+  background-size: 7.5rem 12rem;
+  border-radius: 1rem;
+  background-image: url("src/assets/back1.png");
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.card-front {
+  background: white;
+  color: black;
+  transform: rotateY(180deg);
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  text-align: center;
+  flex-direction: column;
+  gap: 1rem;
+  background-size: cover;
+}
+
+.open-btn {
+  display: block;
+  margin: 30px auto;
+  width: min(300px, 80vw);
+  padding: 14px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.card-front h4 {
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .tarot-card {
+    width: 110px;
+    height: 170px;
   }
 
-  &::before {
-    left: 0;
-    border-left-color: var(--border);
-  }
-  &::after {
-    right: 0;
-    border-right-color: var(--border);
+  .card-front {
+    font-size: 0.8rem;
   }
 }

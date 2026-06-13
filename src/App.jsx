@@ -1,123 +1,81 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
+import { cardData } from "./cardData";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [selectedCard, setSelectedCard] = useState(null);
+  const [openedCards, setOpenedCards] = useState([]);
+
+  const handleSelect = (index) => {
+    setSelectedCard((prev) => (prev === index ? null : index));
+  };
+
+  const handleOpen = () => {
+    if (selectedCard === null) return;
+
+    // 이미 열린 카드면 추가 안 함
+    if (openedCards.includes(selectedCard)) return;
+
+    setOpenedCards((prev) => [...prev, selectedCard]);
+  };
 
   return (
-    <>
-      <section id="center">
-        <div><h1>Hello.MyFirst Project</h1></div>
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
+    <div className="app">
+      <div className="overlay">
+        <header className="hero">
+          <h1>✨ Insight Cards ✨</h1>
+          <h2>나를 알아가는 여정의 시작</h2>
+          <p>카드를 선택하고 당신의 내면의 목소리에 귀 기울여보세요</p>
+        </header>
+
+        <section className="intro-box align-items-center">
+          <p className="m-0">
+            12개의 카드 중 하나를 선택하면, 당신의 내면을 탐구하는 깊이 있는
+            질문이 나타납니다.
           </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+        </section>
 
-      <div className="ticks"></div>
+        <div className="card-container">
+          <div className="card-list">
+            {cardData.map((card, index) => {
+              const isSelected = selectedCard === index;
+              const isOpened = openedCards.includes(index);
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+              return (
+                <div
+                  key={index}
+                  className={`tarot-card
+                  ${isSelected ? "selected" : ""}
+                  ${isOpened ? "opened" : ""}
+                `}
+                  onClick={() => handleSelect(index)}
+                >
+                  <div className="card-inner">
+                    <div className="card-back"></div>
+                    <div
+                      className="card-front"
+                      style={{
+                        backgroundImage: `url(${card.img})`,
+                      }}
+                    >
+                      <h4>{card.title}</h4>
+                      <p>{card.question}</p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+        {selectedCard !== null && !openedCards.includes(selectedCard) && (
+          <button className="open-btn" onClick={handleOpen}>
+            카드 열기
+          </button>
+        )}
+      </div>
+    </div>
+  );
 }
 
-export default App
+export default App;
